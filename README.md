@@ -82,7 +82,7 @@ nest g service database
 
 ```
 
-## In database.sertice.ts
+# In database.sertice.ts
 ```bash
 
 export class DatabaseService extends PrismaClient {
@@ -103,3 +103,19 @@ export class DatabaseService extends PrismaClient {
 
 ## in database.module.ts add:
 @Global() 
+
+
+
+
+
+##Authentication using JWT
+
+```bash
+
+ nest g module auth
+ nest g service auth
+ nest g controller auth
+
+ nest g module users
+ nest g service users
+ ```
