@@ -16,7 +16,101 @@ datasource db {
 
 model User {
   id    String  @id @default(cuid())
+
   email String  @unique
   name  String?
   password String 
+  image String?
+  is_admin Boolean @default(false)
+  
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Subscription Subscription[]
+  Query Query[]
+  PackageUsage PackageUsage[]
+}
+model Package {
+  id    String  @id @default(cuid())
+
+  title String @unique
+  description String?
+  price Float
+  image String?
+  no_of_download Int?
+  no_of_query Int?
+  no_of_history_day Int?
+
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Subscription Subscription[]
+  PackageUsage PackageUsage[]
+}
+
+model Service {
+  id    String  @id @default(cuid())
+
+  title String @unique
+  description String?
+  image String?
+
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Query Query[]
+}
+
+model Subscription {
+  id    String  @id @default(cuid())
+
+  user_id String
+  package_id String
+  start_date DateTime
+  price Float
+  end_date DateTime
+
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  User User @relation(fields: [user_id], references: [id])
+  Package Package @relation(fields: [package_id], references: [id])
+}
+
+model Query {
+  id    String  @id @default(cuid())
+
+  user_id String
+  service_id String
+  query String
+  result String?
+  is_downloaded Boolean @default(false)
+  download_type String?
+
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  User User @relation(fields: [user_id], references: [id])
+  Service Service @relation(fields: [service_id], references: [id])
+}
+
+model PackageUsage {
+  id    String  @id @default(cuid())
+
+  user_id String
+  package_id String
+  query_count Int
+  download_count Int
+
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  User User @relation(fields: [user_id], references: [id])
+  Package Package @relation(fields: [package_id], references: [id])
 }
