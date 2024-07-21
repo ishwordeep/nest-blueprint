@@ -119,3 +119,13 @@ export class DatabaseService extends PrismaClient {
  nest g module users
  nest g service users
  ```
+
+##Resetting Migration tables
+
+```bash
+# delete all the migrations from prisma folder
+
+npx prisma migrate dev --name init
+npx prisma migrate reset
+
+ ```
