@@ -82,8 +82,6 @@ export class AuthService {
 
         const token = await this.jwtService.sign(payload, {
             secret: secret,
-            // expiresIn: '1d' // expires in 1 day
-            // expiresIn readfrom config file
             expiresIn: this.config.get('JWT_EXPIRES_IN')
         });
 
