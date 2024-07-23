@@ -16,7 +16,16 @@ datasource db {
 
 model User {
   id    String  @id @default(cuid())
+
   email String  @unique
   name  String?
   password String 
+  image String?
+  is_admin Boolean @default(false)
+  
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("users")
 }
