@@ -129,3 +129,14 @@ npx prisma migrate dev --name init
 
 
  ```
+
+
+###File Handling
+
+```bash
+
+yarn add -D @types/multer
+yarn add @nestjs/platform-express multer
+
+
+ ```
