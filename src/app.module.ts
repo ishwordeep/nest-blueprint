@@ -6,11 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user';
 import { ImageUploadModule } from './image-upload/image-upload.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 @Module({
   imports: [DatabaseModule, ConfigModule.forRoot({
     isGlobal: true,
-  }), AuthModule,UserModule, ImageUploadModule],
+  }), AuthModule,UserModule, ImageUploadModule, FileUploadModule],
   controllers: [AppController],
   providers: [AppService],
 })

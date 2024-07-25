@@ -46,7 +46,9 @@ export class AuthService {
             const user = await this.database.user.create({
                 data: {
                     email: dto.email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    name: dto.name,
+                    image: dto.image
                 }
             });
             const token = await this.signToken(user.id, user.email); //return token
@@ -54,10 +56,7 @@ export class AuthService {
                 ...this.sanitizeUser(user),
                 ...token,
             };
-            // return {
-            //     user: this.sanitizeUser(user),
-            //     ...token,
-            // };
+           
 
         }
         catch (error) {

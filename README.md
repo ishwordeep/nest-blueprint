@@ -140,3 +140,15 @@ yarn add @nestjs/platform-express multer
 
 
  ```
+
+ ```bash
+
+import FileUploadModule to the module of desired module like:user module.
+
+@Module({
+  imports: [FileUploadModule]
+})
+
+ ```
+
+
