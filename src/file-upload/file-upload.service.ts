@@ -6,37 +6,25 @@ import { extname, join } from 'path';
 import * as fs from 'fs';
 
 @Injectable()
-export class FileUploadService implements MulterOptionsFactory {
-    createMulterOptions(): MulterModuleOptions  {
-    console.log("inside file upload service")
+export class FileUploadService {
+    async saveFile(file: Express.Multer.File, subfolder: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const fileExtName = extname(file.originalname);
+            const fileName = uuidv4();
+            const uploadPath = join(__dirname, '..', '..', 'uploads', subfolder);
 
-        return {
-            storage: diskStorage({
-                destination: (req, file, cb) => {
-                    // const userSubFolder = req.params.userId;
-                    const userSubFolder = 'users';
-                    const uploadPath = join(__dirname, '..', "..",'uploads', userSubFolder);
-
-                    if (!fs.existsSync(uploadPath)) {
-                        fs.mkdirSync(uploadPath, { recursive: true });
-                    }
-                    cb(null, uploadPath);
-                },
-                filename: (req, file, cb) => {
-                    const fileExtName = extname(file.originalname);
-                    const fileName = uuidv4();
-                    cb(null, `${fileName}${fileExtName}`);
-                },
-            }),
-            fileFilter: (req, file, cb) => {
-                if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-                    return cb(
-                        new HttpException('Only image files are allowed!', HttpStatus.BAD_REQUEST),
-                        false,
-                    );
-                }
-                cb(null, true);
+            if (!fs.existsSync(uploadPath)) {
+                fs.mkdirSync(uploadPath, { recursive: true });
             }
-        };
+
+            const filePath = join(uploadPath, `${fileName}${fileExtName}`);
+
+            fs.writeFile(filePath, file.buffer, (err) => {
+                if (err) {
+                    return reject(new HttpException('File upload failed', HttpStatus.INTERNAL_SERVER_ERROR));
+                }
+                resolve(`${fileName}${fileExtName}`);
+            });
+        });
     }
 }

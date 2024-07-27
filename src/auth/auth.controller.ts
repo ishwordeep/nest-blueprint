@@ -19,9 +19,7 @@ export class AuthController {
     @Post('signup')
     @UseInterceptors(FileInterceptor('image'))
     async signup(@Body() dto: AuthDto, @UploadedFile() file: Express.Multer.File) {
-        if(file){
-            dto.image = file.filename;
-        }
-        return this.authService.signup(dto);
+       
+        return this.authService.signup(dto,file);
     }
 }
