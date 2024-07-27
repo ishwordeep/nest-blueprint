@@ -23,6 +23,7 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+<<<<<<< HEAD
   Subscription Subscription[]
   Query Query[]
   PackageUsage PackageUsage[]
@@ -128,3 +129,7 @@ enum DownloadType {
   JSON
   CSV
 }
+=======
+  @@map("users")
+}
+>>>>>>> dc337b2690b378a0fb643c8e90f4e6fc78219ad1

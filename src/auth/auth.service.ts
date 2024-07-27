@@ -5,14 +5,16 @@ import { DatabaseService } from 'src/database/database.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { FileUploadService } from 'src/file-upload/file-upload.service';
 
 
 @Injectable()
 export class AuthService {
     constructor(
+        private readonly fileUploadService: FileUploadService,
         private database: DatabaseService,
         private jwtService: JwtService, //to sign token
-        private config: ConfigService //to import JWT_SECRET
+        private config: ConfigService //to import JWT_SECRET,
     ) { }
 
 
@@ -39,25 +41,42 @@ export class AuthService {
         };
     }
 
-    async signup(dto: AuthDto) {
+    async signup(dto: AuthDto,file: Express.Multer.File) {
 
         try {
+            // Hash the password
             const hashedPassword = await argon2.hash(dto.password);
+
+            // Create the user in the database
             const user = await this.database.user.create({
                 data: {
                     email: dto.email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    name: dto.name,
+                    image: ''
                 }
             });
-            const token = await this.signToken(user.id, user.email); //return token
+
+             // Save the file to the storage
+             const savedFilename = await this.fileUploadService.saveFile(file, 'user-profile');
+             const imagePath = `user-profile/${savedFilename}`;
+             // Update user record with the actual filename
+             await this.database.user.update({
+                 where: { id: user.id },
+                 data: { image: imagePath }
+             });
+
+              // Generate JWT token
+            const token = await this.signToken(user.id, user.email); 
+
+            // Return sanitized user data and token
             return {
                 ...this.sanitizeUser(user),
+                image: imagePath,
                 ...token,
+
             };
-            // return {
-            //     user: this.sanitizeUser(user),
-            //     ...token,
-            // };
+           
 
         }
         catch (error) {

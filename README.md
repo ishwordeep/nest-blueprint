@@ -126,6 +126,35 @@ export class DatabaseService extends PrismaClient {
 # delete all the migrations from prisma folder
 
 npx prisma migrate dev --name init
+<<<<<<< HEAD
 npx prisma migrate reset
 
  ```
+=======
+
+
+ ```
+
+
+###File Handling
+
+```bash
+
+yarn add -D @types/multer
+yarn add @nestjs/platform-express multer
+
+
+ ```
+
+ ```bash
+
+import FileUploadModule to the module of desired module like:user module.
+
+@Module({
+  imports: [FileUploadModule]
+})
+
+ ```
+
+
+>>>>>>> dc337b2690b378a0fb643c8e90f4e6fc78219ad1
