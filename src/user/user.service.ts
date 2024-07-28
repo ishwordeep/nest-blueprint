@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
-import { GetUser } from 'src/auth/decorator';
-import { DatabaseService } from 'src/database/database.service';
-=======
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 import { ChangePasswordDTO, UpdateProfileDTO } from './dto';
 import * as argon2 from 'argon2';
 
->>>>>>> dc337b2690b378a0fb643c8e90f4e6fc78219ad1
 
 @Injectable()
 export class UserService {
@@ -22,8 +15,6 @@ export class UserService {
         // using the user information. For now, we're just returning the user.
         return user;
     }
-<<<<<<< HEAD
-=======
 
     async getAllUsers() {
         const users = await this.databaseService.user.findMany();
@@ -85,5 +76,4 @@ export class UserService {
         };
     }
     
->>>>>>> dc337b2690b378a0fb643c8e90f4e6fc78219ad1
 }
