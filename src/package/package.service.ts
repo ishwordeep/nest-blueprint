@@ -7,6 +7,14 @@ import { formatResponse } from 'src/utils';
 export class PackageService {
     constructor(private database: DatabaseService) { }
 
+    private async checkPackageExists(id: string) {
+        const packageData = await this.database.package.findUnique({ where: { id } });
+        if (!packageData) {
+            throw new NotFoundException(`Package with ID ${id} not found`);
+        }
+        return packageData;
+    }
+
     async getPackageList() {
         try {
             const packageData = await this.database.package.findMany();
@@ -16,7 +24,7 @@ export class PackageService {
                 const { created_at, updated_at, ...rest } = item;
                 return rest;
             });
-            
+
             return formatResponse(true, filteredData, 'Package list found');
         }
         catch (e) {
@@ -26,17 +34,10 @@ export class PackageService {
 
     async getPackageById(id: string) {
         try {
-            const packageData = await this.database.package.findUnique({
-                where: { id }
-            });
+            const packageData = await this.checkPackageExists(id); // Ensure the package exists
 
-            if (!packageData) {
-                throw new NotFoundException(`Package with ID ${id} not found`);
-            }
-
-            // Exclude 'created_at' and 'updated_at' from the results
             const { created_at, updated_at, ...result } = packageData;
-            
+
             return formatResponse(true, result, `Package with ID ${id} found`);
         } catch (e) {
             if (e instanceof NotFoundException) {
@@ -59,7 +60,7 @@ export class PackageService {
                     is_active: dto.is_active
                 }
             });
-            
+
             const { created_at, updated_at, ...result } = packageData;
             return formatResponse(true, result, 'Package created successfully');
         }
@@ -74,14 +75,7 @@ export class PackageService {
 
     async updatePackage(id: string, dto: UpdatePackageDTO) {
         try {
-            // Check if the package exists
-            const packageExists = await this.database.package.findUnique({
-                where: { id }
-            });
-
-            if (!packageExists) {
-                throw new NotFoundException(`Package with ID ${id} not found`);
-            }
+            await this.checkPackageExists(id);
 
             // Update the package
             const packageData = await this.database.package.update({
@@ -90,7 +84,7 @@ export class PackageService {
             });
 
             const { created_at, updated_at, ...result } = packageData;
-            
+
             return formatResponse(true, result, `Package with ID ${id} updated successfully`);
 
         } catch (e) {
@@ -104,13 +98,7 @@ export class PackageService {
     async deletePackage(id: string) {
         try {
             // Check if the package exists
-            const packageExists = await this.database.package.findUnique({
-                where: { id }
-            });
-
-            if (!packageExists) {
-                throw new NotFoundException(`Package with ID ${id} not found`);
-            }
+            await this.checkPackageExists(id);
 
             // Delete the package
             const packageData = await this.database.package.delete({
@@ -119,7 +107,7 @@ export class PackageService {
 
             const { created_at, updated_at, ...result } = packageData;
 
-            return formatResponse(true, result,`Package with ID ${id} deleted successfully`);
+            return formatResponse(true, result, `Package with ID ${id} deleted successfully`);
 
         } catch (e) {
             if (e instanceof NotFoundException) {
@@ -128,4 +116,6 @@ export class PackageService {
             throw new BadRequestException(e.message);
         }
     }
+
+
 }
