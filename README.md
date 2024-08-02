@@ -152,3 +152,4 @@ import FileUploadModule to the module of desired module like:user module.
  ```
 
 
+yarn crud <name>

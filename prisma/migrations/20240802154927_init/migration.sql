@@ -33,7 +33,7 @@ CREATE TABLE `packages` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `services` (
+CREATE TABLE `integrations` (
     `id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `services` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `services_title_key`(`title`),
+    UNIQUE INDEX `integrations_title_key`(`title`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -65,7 +65,7 @@ CREATE TABLE `subscriptions` (
 CREATE TABLE `queries` (
     `id` VARCHAR(191) NOT NULL,
     `user_id` VARCHAR(191) NOT NULL,
-    `service_id` VARCHAR(191) NOT NULL,
+    `integration_id` VARCHAR(191) NOT NULL,
     `query` VARCHAR(191) NOT NULL,
     `result` VARCHAR(191) NULL,
     `is_downloaded` ENUM('PDF', 'JSON', 'CSV') NOT NULL DEFAULT 'JSON',
@@ -101,7 +101,7 @@ ALTER TABLE `subscriptions` ADD CONSTRAINT `subscriptions_package_id_fkey` FOREI
 ALTER TABLE `queries` ADD CONSTRAINT `queries_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `queries` ADD CONSTRAINT `queries_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `queries` ADD CONSTRAINT `queries_integration_id_fkey` FOREIGN KEY (`integration_id`) REFERENCES `integrations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `package_usages` ADD CONSTRAINT `package_usages_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

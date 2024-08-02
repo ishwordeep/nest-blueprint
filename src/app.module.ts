@@ -8,12 +8,15 @@ import { UserModule } from './user';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { PackageService } from './package/package.service';
 import { PackageModule } from './package/package.module';
+import { IntegrationService } from './integration/integration.service';
+import { IntegrationModule } from './integration/integration.module';
+import { IntegrationController } from './integration/integration.controller';
 
 @Module({
   imports: [DatabaseModule, ConfigModule.forRoot({
     isGlobal: true,
-  }), AuthModule,UserModule, FileUploadModule,PackageModule],
+  }), AuthModule,UserModule, FileUploadModule,PackageModule,IntegrationModule],
   controllers: [AppController],
-  providers: [AppService, PackageService],
+  providers: [AppService, PackageService, IntegrationService],
 })
 export class AppModule { }
