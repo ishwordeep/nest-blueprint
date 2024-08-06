@@ -10,14 +10,26 @@ import { PackageService } from './package/package.service';
 import { PackageModule } from './package/package.module';
 import { IntegrationService } from './integration/integration.service';
 import { IntegrationModule } from './integration/integration.module';
-import { IntegrationController } from './integration/integration.controller';
 import { SubscriptionService } from './subscription/subscription.service';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { SubscriptionModule as FrontendSubscriptionModule } from './frontend/subscription/subscription.module';
+import { PackageModule as FrontendPackageModule } from './frontend/package/package.module';
 
 @Module({
-  imports: [DatabaseModule, ConfigModule.forRoot({
-    isGlobal: true,
-  }), AuthModule,UserModule, FileUploadModule,PackageModule,IntegrationModule,SubscriptionModule],
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AuthModule,
+    UserModule,
+    FileUploadModule,
+    PackageModule,
+    IntegrationModule,
+    SubscriptionModule,
+    FrontendSubscriptionModule,
+    FrontendPackageModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PackageService, IntegrationService, SubscriptionService],
 })
